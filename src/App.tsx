@@ -1,34 +1,51 @@
-
+import { useRef } from 'react'
 import './App.css';
-import {Container, Paper,Typography} from '@mui/material';
+import { Container, Paper, Typography } from '@mui/material';
+
+import * as tf from '@tensorflow/tfjs'
+import * as facemesh from '@tensorflow-models/facemesh'
+import Webcam from 'react-webcam'
 
 function App() {
+  const webcamRef = useRef(null)
+  const canvasRef = useRef(null)
+
+  const runFacemesh = async (): Promise<void> => {
+    const net = await facemesh.load({
+      inputResolution: { width: 640, height: 480 }, scale: 0.8
+    })
+  }
+
   const styles = {
     Container: {
-      height:'100vh',
-      display:'flex',
-      alignItems:'center',
-      justifyContent:'center',
-      textAlign:'center'
+      height: '100vh',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      textAlign: 'center'
     },
-    Title:{
-      fontWeight:700
+    Title: {
+      fontWeight: 700
     },
-    FlexBox:{
-      display:'flex',
-      flexDirection:'column',
-      gap:2,
-      padding:5
+    FlexBox: {
+      display: 'flex',
+      flexDirection: 'column',
+      gap: 2,
+      padding: 5,
+      width: '100%'
+    },
+    Webcam: {
+      width: '100%'
     }
   }
+
   return (
     <Container sx={styles.Container}>
       <Paper sx={styles.FlexBox} elevation={0}>
-        <Typography sx={styles.Title} variant="h3" component="h1">React without the crap!</Typography>
-        <Typography variant="body1" component="p">Get right to building your SaaS product with the best UI library. No more bullshit boilerplate code!</Typography>
-        <code><a target="_blank" href="https://digyt.co">Made with love by Digyt</a></code>
+        <Webcam ref={webcamRef} style={styles.Webcam as {}} />
+        <canvas style={styles.Webcam as {}} ref={canvasRef}></canvas>
       </Paper>
-    </Container>
+    </Container >
   );
 }
 
